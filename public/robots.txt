@@ -1,0 +1,3 @@
+# Ontwerpvoorstel: niet indexeren. Verwijder deze regels (of zet "Allow: /") zodra de club de site overneemt.
+User-agent: *
+Disallow: /

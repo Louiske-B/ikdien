@@ -1,26 +1,156 @@
 @import "tailwindcss";
 
+/* ===== Designsysteem Ik Dien (voorstel) ===== */
+@theme inline {
+  --color-paars-50: #f6f2fb;
+  --color-paars-100: #ece4f6;
+  --color-paars-200: #d8c9ec;
+  --color-paars-300: #bba2dc;
+  --color-paars-400: #9a76c6;
+  --color-paars-500: #7a4fae;
+  --color-paars-600: #5f3a93;
+  --color-paars-700: #4b2a7b;
+  --color-paars-800: #3a2060;
+  --color-paars-900: #2a1647;
+  --color-paars-950: #1a0d2e;
+
+  --color-goud: #c9a44c;
+  --color-goud-licht: #e3cb86;
+  --color-goud-donker: #9a7a2b;
+
+  --font-kop: var(--font-kop-next), Impact, sans-serif;
+  --font-tekst: var(--font-tekst-next), system-ui, sans-serif;
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f1a28;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-tekst-next), system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+/* Zichtbare focus voor toetsenbordgebruikers */
+:focus-visible {
+  outline: 3px solid var(--color-goud);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--color-paars-950);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-kop-next), Impact, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    font-weight: 800;
+  }
+}
+
+@layer components {
+  .container-pagina {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  /* Knoppen */
+  .knop-primair,
+  .knop-goud,
+  .knop-omlijnd,
+  .knop-licht,
+  .knop-uit {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-6 py-2.5 font-kop text-lg font-bold uppercase tracking-wide transition-colors;
+  }
+  .knop-primair {
+    @apply bg-paars-700 text-white hover:bg-paars-800;
+  }
+  .knop-goud {
+    @apply bg-goud text-paars-950 hover:bg-goud-licht;
+  }
+  .knop-omlijnd {
+    @apply border-2 border-paars-700 text-paars-700 hover:bg-paars-50;
+  }
+  .knop-licht {
+    @apply border-2 border-white text-white hover:bg-white/10;
+  }
+  .knop-uit {
+    @apply cursor-not-allowed border-2 border-dashed border-neutral-400 bg-neutral-100 text-neutral-600;
+  }
+
+  /* Kaarten */
+  .kaart,
+  .kaart-link {
+    @apply relative flex flex-col overflow-hidden rounded-xl border border-paars-100 bg-white shadow-sm;
+  }
+  .kaart-link {
+    @apply transition-shadow hover:shadow-lg;
+  }
+
+  /* Decoratie */
+  .patroon-diag {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.06) 0 2px,
+      transparent 2px 16px
+    );
+  }
+  .snede-onder {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3rem), 0 100%);
+    padding-bottom: 4.5rem;
+  }
+  .label-voorbeeld {
+    @apply inline-block rounded bg-goud px-2 py-0.5 font-kop text-sm font-bold uppercase tracking-wide text-paars-950;
+  }
+}
+
+/* Sponsor-carrousel: pauzeert bij hover, focus en via de pauzeknop; statische grid bij reduced motion */
+@keyframes scroll-links {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-spoor {
+  display: flex;
+  width: max-content;
+  animation: scroll-links 40s linear infinite;
+}
+.marquee:hover .marquee-spoor,
+.marquee:focus-within .marquee-spoor,
+.marquee[data-gepauzeerd="true"] .marquee-spoor {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-spoor {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+  }
+  .marquee-kopie,
+  .marquee-knop {
+    display: none;
+  }
 }
